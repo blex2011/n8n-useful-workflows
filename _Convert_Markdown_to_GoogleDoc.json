@@ -1,0 +1,610 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2848,
+        136
+      ],
+      "id": "b57c3b56-69da-49ca-9994-37adfd367b01",
+      "name": "Manual Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Count total markdown files found\nconst totalFiles = $input.all().length;\nconsole.log(`Found ${totalFiles} markdown files to process`);\n\nif (totalFiles === 0) {\n  return { message: 'No markdown files found in the specified folder' };\n}\n\nreturn $input.all().map((item, index) => ({\n  ...item.json,\n  fileIndex: index + 1,\n  totalFiles: totalFiles\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2176,
+        136
+      ],
+      "id": "0539d04d-6809-450b-bd0c-cf788599db22",
+      "name": "Count and Index Files"
+    },
+    {
+      "parameters": {
+        "content": "## Count and Index Files\n\n**What this does:** Counts the total number of markdown files and adds index numbers for progress tracking.\n\n",
+        "height": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2256,
+        288
+      ],
+      "id": "a22602e8-39bf-4f5e-bf7e-ca9de7e8b2cd",
+      "name": "Count Files Info"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1952,
+        136
+      ],
+      "id": "03129da2-205e-4f3c-8aa5-ee6f95680462",
+      "name": "Process Files One by One"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log progress\nconst currentFile = $input.first().json;\nconsole.log(`Processing file ${currentFile.fileIndex}/${currentFile.totalFiles}: ${currentFile.name}`);\n\nreturn currentFile;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1728,
+        64
+      ],
+      "id": "b138b855-56a2-4276-881d-882b5702fee4",
+      "name": "Log Progress"
+    },
+    {
+      "parameters": {
+        "content": "## Log Progress\n\n**What this does:** Shows progress in the console as each file is processed.",
+        "height": 240
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1776,
+        288
+      ],
+      "id": "a7e85ffd-1477-4a6e-82c7-0f8bce5d201b",
+      "name": "Log Progress Info"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "id": "10b4e63b-f0cd-42d3-b03a-567229171bb8"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1056,
+        64
+      ],
+      "id": "b975f678-e715-4e22-bce4-85b42be44d4e",
+      "name": "Check for Errors"
+    },
+    {
+      "parameters": {
+        "content": "## Check for Errors\n\n**What this does:** Checks if there were any errors in processing and routes accordingly.\n\n",
+        "height": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1104,
+        368
+      ],
+      "id": "2ac9b999-903d-4d2a-9f6b-ed1108c7822d",
+      "name": "Check Errors Info"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log success or error\nconst input = $input.first().json;\n\nif ($input.first().json.error) {\n  console.log(`❌ ERROR uploading file ${input.fileIndex}/${input.totalFiles}: ${input.filename} - ${input.error}`);\n  return { \n    status: 'error', \n    filename: input.filename, \n    error: input.error,\n    fileIndex: input.fileIndex,\n    totalFiles: input.totalFiles\n  };\n} else {\n  console.log(`✅ SUCCESS: File ${input.fileIndex}/${input.totalFiles} uploaded: ${input.filename}`);\n  return { \n    status: 'success', \n    filename: input.filename,\n    documentId: input.id,\n    fileIndex: input.fileIndex,\n    totalFiles: input.totalFiles\n  };\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        160
+      ],
+      "id": "49b0b42a-b0f9-48d7-971e-29c791ac260c",
+      "name": "Log Result"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log the error and continue\nconst input = $input.first().json;\nconsole.log(`⚠️  SKIPPED: File ${input.fileIndex}/${input.totalFiles} had errors: ${input.originalFilename || 'unknown'} - ${input.error}`);\n\nreturn { \n  status: 'skipped', \n  filename: input.originalFilename || 'unknown', \n  error: input.error,\n  fileIndex: input.fileIndex,\n  totalFiles: input.totalFiles\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        -32
+      ],
+      "id": "c81e0a3c-3aba-42a2-b9ff-63751a804c55",
+      "name": "Log Error and Skip"
+    },
+    {
+      "parameters": {
+        "unit": "seconds"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        64,
+        160
+      ],
+      "id": "4274fcc8-8bab-4f68-9f1b-cb8f5ece3f6d",
+      "name": "Wait Between Files",
+      "webhookId": "ADD_YOUR_WEBHOOK_ID_HERE"
+    },
+    {
+      "parameters": {
+        "content": "## Wait Between Files\n\n**What this does:** Adds a 1 second delay between processing files to respect API rate limits.\n\n**Configuration needed:** \n- The webhook ID will be auto-generated when you save the workflow\n- You can adjust the wait time if needed",
+        "height": 324
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        368
+      ],
+      "id": "ec397877-b529-4060-8cd1-b797cde5cd29",
+      "name": "Wait Info"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "mimeType!='application/vnd.google-apps.folder'",
+        "returnAll": true,
+        "filter": {
+          "driveId": {
+            "__rl": true,
+            "value": "ADD_YOUR_DRIVE_ID_HERE",
+            "mode": "id"
+          },
+          "folderId": {
+            "__rl": true,
+            "value": "ADD_YOUR_FOLDER_ID_HERE",
+            "mode": "list",
+            "cachedResultName": "ADD_YOUR_FOLDER_NAME_HERE",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/ADD_YOUR_FOLDER_ID_HERE"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -2624,
+        136
+      ],
+      "id": "baf6af79-d082-4fa5-a9aa-714f82e51d52",
+      "name": "List Files in Folder1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "sNiGPzFqtZoX0NOr",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## List Files in Folder\n\n**What this does:** Lists all files from a specific Google Drive folder.\n\n**Configuration needed:**\n1. **Google Drive Credentials:** Set up OAuth2 credentials for Google Drive\n2. **Folder ID:** Replace ADD_YOUR_DRIVE_ID_HERE with your Google Drive folder ID\n3. **Folder Name:** Replace ADD_YOUR_FOLDER_NAME_HERE with your folder name\n\n**How to get Folder ID:**\nOpen your Google Drive folder in browser, copy the ID from the URL:\n`https://drive.google.com/drive/folders/YOUR_FOLDER_ID_HERE`",
+        "height": 372,
+        "width": 460
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2944,
+        288
+      ],
+      "id": "fe1dea33-84d5-45ee-9819-f16246269a98",
+      "name": "List Files Info"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.name }}",
+              "operation": "endsWith",
+              "value2": ".md"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1,
+      "position": [
+        -2400,
+        136
+      ],
+      "id": "154e7650-80cc-4c07-a611-b02b728ed8c8",
+      "name": "Filter Markdown Files1"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "options": {
+          "binaryPropertyName": "fileData"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1504,
+        64
+      ],
+      "id": "cae24505-bdc7-4560-8b52-e854aee993cd",
+      "name": "Download Markdown File1",
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "content": "## Download Markdown File\n\n**What this does:** Downloads each markdown file from Google Drive as binary data.\n\n**Configuration needed:**\n1. **Google Drive Credentials:** Use the same credentials as the List Files node\n2. **Continue on Fail:** Already enabled to handle download errors gracefully",
+        "height": 372
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1536,
+        288
+      ],
+      "id": "7849b6bf-afe0-40aa-969b-19e6f7744877",
+      "name": "Download File Info"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check if download was successful\nif (!$input.first().binary || !$input.first().binary.fileData) {\n  console.log(`Failed to download file: ${$input.first().json.name}`);\n  return { error: `Failed to download file: ${$input.first().json.name}` };\n}\n\n// Get the binary data and convert to text\nconst binaryData = $input.first().binary.fileData;\nconst markdownContent = Buffer.from(binaryData.data, 'base64').toString('utf8');\n\n// Get the original filename and remove .md extension for the new filename\nconst originalName = $input.first().json.name;\nconst baseFilename = originalName.replace(/\\.md$/i, '');\n\n// Find first heading in markdown for better filename\nconst lines = markdownContent.split('\\n');\nlet heading = '';\n\nfor (const line of lines) {\n  const trimmed = line.trim();\n  if (trimmed.startsWith('#')) {\n    // Remove markdown heading symbols and trim\n    heading = trimmed.replace(/^#+\\s*/, '').trim();\n    break;\n  }\n}\n\n// If no heading found, use first non-empty line or fallback to base filename\nif (!heading) {\n  for (const line of lines) {\n    const trimmed = line.trim();\n    if (trimmed && trimmed.length > 0) {\n      heading = trimmed.substring(0, 50); // Limit length\n      break;\n    }\n  }\n}\n\n// Use heading if found, otherwise use base filename\nconst displayName = heading || baseFilename || 'Untitled Document';\n\n// Convert to valid filename\nconst filename = displayName\n  .replace(/[<>:\"/\\\\|?*]/g, '') // Remove invalid filename characters\n  .replace(/\\s+/g, '_') // Replace spaces with underscores\n  .replace(/[^\\w\\-_.]/g, '') // Keep only alphanumeric, dash, underscore, dot\n  .replace(/_{2,}/g, '_') // Replace multiple underscores with single\n  .replace(/^_+|_+$/g, '') // Remove leading/trailing underscores\n  .substring(0, 100) // Limit filename length\n  || 'untitled'; // Final fallback\n\nconsole.log(`Extracted content from: ${originalName}, generating doc: ${filename}`);\n\nreturn {\n  filename: filename,\n  originalHeading: heading || displayName,\n  markdown: markdownContent,\n  originalFilename: originalName,\n  fileIndex: $input.first().json.fileIndex,\n  totalFiles: $input.first().json.totalFiles\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1280,
+        64
+      ],
+      "id": "4806ba91-8971-4c18-97a0-a44afba8cceb",
+      "name": "Extract Markdown Content1",
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.markdown }}",
+        "options": {
+          "emoji": true,
+          "tables": true
+        }
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        -832,
+        160
+      ],
+      "id": "5d218939-a87e-4c4b-aff0-4e5794b908f1",
+      "name": "Convert Markdown to HTML1"
+    },
+    {
+      "parameters": {
+        "content": "## Convert Markdown to HTML\n\n**What this does:** Converts markdown content to HTML format with emoji and table support.\n\n",
+        "height": 288,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -848,
+        368
+      ],
+      "id": "0faaa84c-326c-4022-87d3-905e3dc99016",
+      "name": "Convert HTML Info"
+    },
+    {
+      "parameters": {
+        "jsCode": "const boundary = 'divider';\nconst docName = $input.first().json.filename\nconst folderId = 'ADD_YOUR_FOLDER_ID_HERE'\nconst htmlContent = $input.first().json.data;\n\nconst metadata = JSON.stringify({\n  name: docName,\n  mimeType: \"application/vnd.google-apps.document\",\n  parents: [folderId]\n});\n\nconst htmlWithStyles = `\n<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <style>\n    /* Add bottom margin to block elements for spacing */\n    p,\n    ul,\n    ol,\n    table,\n    h1,\n    h2,\n    h3,\n    h4,\n    h5,\n    h6 {\n      margin-bottom: 10pt;\n    }\n\n    h2 {\n      margin-top: 20pt;\n    }\n\n    /* Prevent margin collapse issues or excessive space inside lists */\n    li {\n       margin-bottom: 2pt; /* Optional: small space between list items */\n    }\n\n    /* Remove margin from the last child within common containers if needed */\n    /* This might be overly aggressive, test without it first */\n    /*\n    body > *:last-child,\n    li > *:last-child {\n       margin-bottom: 0;\n    }\n    */\n  </style>\n</head>\n<body>\n  ${htmlContent}\n</body>\n</html>\n`;\n\n// Construct the body with literal \\r\\n ONLY\nlet body = `--${boundary}\\r\\n`;\nbody += `Content-Type: application/json; charset=UTF-8\\r\\n`;\nbody += `\\r\\n`; // Blank line\nbody += `${metadata}\\r\\n`;\nbody += `--${boundary}\\r\\n`;\nbody += `Content-Type: text/html\\r\\n`;\nbody += `\\r\\n`; // Blank line\nbody += `${htmlWithStyles}\\r\\n`; // Add the HTML content\nbody += `--${boundary}--\\r\\n`; // Final boundary\n\nreturn {\n  rawData: body,\n  filename: docName,\n  fileIndex: $input.first().json.fileIndex,\n  totalFiles: $input.first().json.totalFiles\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -608,
+        160
+      ],
+      "id": "508ca760-01a7-42b9-84fa-890b9d5363d1",
+      "name": "Prepare Upload Request1"
+    },
+    {
+      "parameters": {
+        "content": "## Prepare Upload Request\n\n**What this does:** Formats the HTML content and metadata into a multipart request for Google Drive API.\n\n**Configuration needed:**\n⚠️ **IMPORTANT:** Replace `ADD_YOUR_FOLDER_ID_HERE` in the code with your destination folder ID for the Google Docs.\n\n**How to get Folder ID:**\nOpen your destination folder in Google Drive, copy the ID from the URL:\n`https://drive.google.com/drive/folders/YOUR_FOLDER_ID_HERE`",
+        "height": 460,
+        "width": 280
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        368
+      ],
+      "id": "3a2862ae-ff75-4c02-b7f7-3b2a7710dcd0",
+      "name": "Prepare Request Info"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/upload/drive/v3/files",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "uploadType",
+              "value": "multipart"
+            },
+            {
+              "name": "supportsAllDrives",
+              "value": "true"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "multipart/related; boundary=divider",
+        "body": "={{ $json.rawData }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -384,
+        160
+      ],
+      "id": "67df0086-6f8c-4230-b502-cb6cd0a49ba3",
+      "name": "Upload to Google Docs1",
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "content": "## Upload to Google Docs\n\n**What this does:** Uses Google Drive API to upload the formatted HTML as a Google Doc.\n\n**Configuration needed:**\n1. **Google Drive Credentials:** Use the same credentials as other Google Drive nodes\n2. **Continue on Fail:** Already enabled to handle upload errors gracefully\n\n**Note:** The URL and parameters are pre-configured for Google Drive API v3.",
+        "height": 456
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        368
+      ],
+      "id": "dc7150a4-decc-43f5-88b9-b0b25372c94d",
+      "name": "Upload Docs Info"
+    },
+    {
+      "parameters": {
+        "content": "## Filter Files\n\n**What this does:** Only consider files ending in .md\n\nNOTE you could parse the files to see if they have markdown, but this seemed faster\n",
+        "height": 256,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2496,
+        288
+      ],
+      "id": "34b8960c-3fd5-4b0c-93f5-226ed4aa9d78",
+      "name": "Count Files Info1"
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "List Files in Folder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Count and Index Files": {
+      "main": [
+        [
+          {
+            "node": "Process Files One by One",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Files One by One": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Log Progress",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Progress": {
+      "main": [
+        [
+          {
+            "node": "Download Markdown File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Errors": {
+      "main": [
+        [
+          {
+            "node": "Log Error and Skip",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Convert Markdown to HTML1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Result": {
+      "main": [
+        [
+          {
+            "node": "Wait Between Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Error and Skip": {
+      "main": [
+        [
+          {
+            "node": "Wait Between Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Between Files": {
+      "main": [
+        [
+          {
+            "node": "Process Files One by One",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Files in Folder1": {
+      "main": [
+        [
+          {
+            "node": "Filter Markdown Files1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Markdown Files1": {
+      "main": [
+        [
+          {
+            "node": "Count and Index Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Markdown File1": {
+      "main": [
+        [
+          {
+            "node": "Extract Markdown Content1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Markdown Content1": {
+      "main": [
+        [
+          {
+            "node": "Check for Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Markdown to HTML1": {
+      "main": [
+        [
+          {
+            "node": "Prepare Upload Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Upload Request1": {
+      "main": [
+        [
+          {
+            "node": "Upload to Google Docs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Google Docs1": {
+      "main": [
+        [
+          {
+            "node": "Log Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "f09791c16aea4c9b19d8c1c7cce69721389954844bc9fa62fa2a2a2a26f5da4b"
+  }
+}
