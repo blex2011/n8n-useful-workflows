@@ -5,10 +5,10 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -2848,
-        136
+        -2928,
+        176
       ],
-      "id": "b57c3b56-69da-49ca-9994-37adfd367b01",
+      "id": "20bb7dbf-312c-42ce-9cf8-82ac5d92d8c0",
       "name": "Manual Trigger"
     },
     {
@@ -18,10 +18,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2176,
-        136
+        -2256,
+        176
       ],
-      "id": "0539d04d-6809-450b-bd0c-cf788599db22",
+      "id": "8107663d-f50f-42e5-be1b-3449ddd8e0c1",
       "name": "Count and Index Files"
     },
     {
@@ -32,10 +32,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -2256,
-        288
+        -2336,
+        320
       ],
-      "id": "a22602e8-39bf-4f5e-bf7e-ca9de7e8b2cd",
+      "id": "8f7f80f6-5da1-47cd-b4da-026fc5d3dc29",
       "name": "Count Files Info"
     },
     {
@@ -45,10 +45,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -1952,
-        136
+        -2032,
+        176
       ],
-      "id": "03129da2-205e-4f3c-8aa5-ee6f95680462",
+      "id": "3c4261ee-58b6-4741-ae2b-e442a8259d2e",
       "name": "Process Files One by One"
     },
     {
@@ -58,10 +58,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1728,
-        64
+        -1808,
+        96
       ],
-      "id": "b138b855-56a2-4276-881d-882b5702fee4",
+      "id": "7e7c2e93-daed-425c-ac82-ddbe6e95c691",
       "name": "Log Progress"
     },
     {
@@ -72,10 +72,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -1776,
-        288
+        -1856,
+        320
       ],
-      "id": "a7e85ffd-1477-4a6e-82c7-0f8bce5d201b",
+      "id": "660f8cdc-e5e8-45c9-a28e-fcce89caa8cd",
       "name": "Log Progress Info"
     },
     {
@@ -106,10 +106,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -1056,
-        64
+        -1136,
+        96
       ],
-      "id": "b975f678-e715-4e22-bce4-85b42be44d4e",
+      "id": "4c60e609-627d-41c4-9cf4-882019709eac",
       "name": "Check for Errors"
     },
     {
@@ -120,10 +120,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -1104,
-        368
+        -1184,
+        400
       ],
-      "id": "2ac9b999-903d-4d2a-9f6b-ed1108c7822d",
+      "id": "476d294b-413d-4c63-a799-9f15f0db62bc",
       "name": "Check Errors Info"
     },
     {
@@ -133,10 +133,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -160,
-        160
+        -240,
+        192
       ],
-      "id": "49b0b42a-b0f9-48d7-971e-29c791ac260c",
+      "id": "39f413d2-0195-464c-bfd9-daab6ffa53e6",
       "name": "Log Result"
     },
     {
@@ -146,10 +146,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -160,
-        -32
+        -240,
+        0
       ],
-      "id": "c81e0a3c-3aba-42a2-b9ff-63751a804c55",
+      "id": "96de7333-9f28-48b2-8d21-01973487a9e4",
       "name": "Log Error and Skip"
     },
     {
@@ -159,10 +159,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1,
       "position": [
-        64,
-        160
+        -16,
+        192
       ],
-      "id": "4274fcc8-8bab-4f68-9f1b-cb8f5ece3f6d",
+      "id": "84f12fe3-1708-4c88-8a1f-4bb3769b078e",
       "name": "Wait Between Files",
       "webhookId": "ADD_YOUR_WEBHOOK_ID_HERE"
     },
@@ -174,10 +174,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -32,
-        368
+        -112,
+        400
       ],
-      "id": "ec397877-b529-4060-8cd1-b797cde5cd29",
+      "id": "c7047fff-7239-41f6-844f-f5c89cdcf9d0",
       "name": "Wait Info"
     },
     {
@@ -205,10 +205,10 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -2624,
-        136
+        -2704,
+        176
       ],
-      "id": "baf6af79-d082-4fa5-a9aa-714f82e51d52",
+      "id": "2e4f8dd1-048c-410d-82f4-a74e047ce7ef",
       "name": "List Files in Folder1",
       "credentials": {
         "googleDriveOAuth2Api": {
@@ -226,10 +226,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -2944,
-        288
+        -3024,
+        320
       ],
-      "id": "fe1dea33-84d5-45ee-9819-f16246269a98",
+      "id": "9e5cbc0e-05f0-4b6b-aa07-1ce6b6cda1e6",
       "name": "List Files Info"
     },
     {
@@ -247,10 +247,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 1,
       "position": [
-        -2400,
-        136
+        -2480,
+        176
       ],
-      "id": "154e7650-80cc-4c07-a611-b02b728ed8c8",
+      "id": "d8771b74-4c60-4b3f-806d-ae431d041e4b",
       "name": "Filter Markdown Files1"
     },
     {
@@ -267,10 +267,10 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -1504,
-        64
+        -1584,
+        96
       ],
-      "id": "cae24505-bdc7-4560-8b52-e854aee993cd",
+      "id": "4cf6c63c-9712-4a34-b132-ef6a58974f42",
       "name": "Download Markdown File1",
       "continueOnFail": true
     },
@@ -282,10 +282,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -1536,
-        288
+        -1616,
+        320
       ],
-      "id": "7849b6bf-afe0-40aa-969b-19e6f7744877",
+      "id": "c1a343ca-8a93-4c52-aba3-ffc798986043",
       "name": "Download File Info"
     },
     {
@@ -295,10 +295,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1280,
-        64
+        -1360,
+        96
       ],
-      "id": "4806ba91-8971-4c18-97a0-a44afba8cceb",
+      "id": "50e7d64b-b92b-4712-b85e-ca52f3d22437",
       "name": "Extract Markdown Content1",
       "continueOnFail": true
     },
@@ -314,10 +314,10 @@
       "type": "n8n-nodes-base.markdown",
       "typeVersion": 1,
       "position": [
-        -832,
-        160
+        -912,
+        192
       ],
-      "id": "5d218939-a87e-4c4b-aff0-4e5794b908f1",
+      "id": "a71552c8-3630-463b-a80b-432e1aaa2b10",
       "name": "Convert Markdown to HTML1"
     },
     {
@@ -329,10 +329,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -848,
-        368
+        -928,
+        400
       ],
-      "id": "0faaa84c-326c-4022-87d3-905e3dc99016",
+      "id": "fe52d754-a336-4321-9ab5-ad049f535045",
       "name": "Convert HTML Info"
     },
     {
@@ -342,10 +342,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -608,
-        160
+        -688,
+        192
       ],
-      "id": "508ca760-01a7-42b9-84fa-890b9d5363d1",
+      "id": "48c25d0c-207d-40ea-90d2-de9cbc7d98ed",
       "name": "Prepare Upload Request1"
     },
     {
@@ -357,10 +357,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -608,
-        368
+        -688,
+        400
       ],
-      "id": "3a2862ae-ff75-4c02-b7f7-3b2a7710dcd0",
+      "id": "b655f1c6-2cc7-44b2-b649-c0ac408b8901",
       "name": "Prepare Request Info"
     },
     {
@@ -391,10 +391,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -384,
-        160
+        -464,
+        192
       ],
-      "id": "67df0086-6f8c-4230-b502-cb6cd0a49ba3",
+      "id": "842843a6-8937-48f3-bd85-757efa04c11e",
       "name": "Upload to Google Docs1",
       "continueOnFail": true
     },
@@ -406,10 +406,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -320,
-        368
+        -400,
+        400
       ],
-      "id": "dc7150a4-decc-43f5-88b9-b0b25372c94d",
+      "id": "93a5a68a-70a7-4d81-ab7b-2c35760ac57b",
       "name": "Upload Docs Info"
     },
     {
@@ -421,11 +421,27 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -2496,
-        288
+        -2576,
+        320
       ],
-      "id": "34b8960c-3fd5-4b0c-93f5-226ed4aa9d78",
+      "id": "60b336a5-0679-4d03-b720-defaf970b872",
       "name": "Count Files Info1"
+    },
+    {
+      "parameters": {
+        "content": "## By Scott Weiner\nhttps://www.linkedin/com/in/sweiner",
+        "height": 96,
+        "width": 304,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2976,
+        -32
+      ],
+      "id": "c6cc983f-99d3-4c95-b082-b8ff55b5617d",
+      "name": "Sticky Note"
     }
   ],
   "connections": {
